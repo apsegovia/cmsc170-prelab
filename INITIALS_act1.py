@@ -3,9 +3,9 @@ CMSC 170: Introduction to Artificial Intelligence
 Pre-Lab Activity 1: The 8-Puzzle Game
 
 
-<FULL NAME>
-<STUDENT NUMBER>
-<SECTION>
+Allen Christian P. Segovia
+2019-65131
+EF2L
 '''
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -43,7 +43,7 @@ class PuzzleApp:
         course_label.pack()
         
         # CHANGE TO YOUR NAME
-        author_label = tk.Label(header_frame, text="Student Name", font=('Helvetica', 14))
+        author_label = tk.Label(header_frame, text="Allen Segovia", font=('Helvetica', 14))
         author_label.pack()
         
         self.canvas = tk.Canvas(self.root, width=300, height=300, bg='white', borderwidth=0, highlightthickness=0, relief=tk.SOLID)
@@ -181,13 +181,27 @@ class PuzzleApp:
     def import_configuration(self):
         filename = filedialog.askopenfilename()
         # print(filename)
-        configuration = open(filename, "r")#.read()
+        configurationfile = open(filename, "r")#.read()
         # print(configuration)
-        node = configuration.read().split()
-        # print(node)
-        self.initial_node = node
-        self.saved_node = node
-        
+        tiles = []
+        while True:
+            line = configurationfile.readline()
+            if not line:
+                break
+            row = line.split()
+            int_row = []
+            for i in row:
+                int_row.append(int(i))
+            print(int_row)
+            
+            tiles.append(int_row)
+            
+        # node = configuration.read().split()
+        print(tiles)
+        self.initial_node = Node(tiles, self.find_empty_spot(tiles))
+        self.saved_node = Node([row[:] for row in tiles], self.find_empty_spot(tiles))
+        self.load_tiles(self.initial_node.state)
+        self.check_solvability(self.initial_node.state)
 
     # -----------------------------------------------------------------------------------------
     # TODO: Checks the number of inversion; whether the tile is solvable or not
